@@ -1,0 +1,85 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+        <h4>NAS存储管理</h4>
+    <a href="/raid/">返回</a>&nbsp;&nbsp;<a href="/nas/nas_global_set/">NAS设置</a>
+    &nbsp;&nbsp;<a href="/nas/?type=add_share&md_name={{ md_name }}&md_mount_path={{ md_mount_path }}">新建共享</a>
+    &nbsp;&nbsp;<a href="/nas/nas_user/">用户管理</a>
+    <br>
+    RAID名称 : {{ md_name }}&nbsp;&nbsp;&nbsp;&nbsp; 路径 :{{ md_mount_path }}
+        <br><div class="navbar-form">=============================<br></div>
+
+{% if type == 'add_share' %}
+    <div class="navbar-form">
+<form name="add_share" action="" method="post">
+共享名称 &nbsp;:&nbsp;&nbsp;<input type="text" name="unit_name" size="25" value="新建共享" class="form-control input-sm"><br>
+说&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;明 : &nbsp;<input type="text" name="comment" size="25" value="" class="form-control input-sm"><br>
+目录设置:<br>
+路&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;径 : &nbsp;<input type="text" name="path" size="25" value="{{ md_mount_path }}/" class="form-control input-sm"><br>
+浏&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;览&nbsp; :
+    <select name="browseable" class="input-sm btn-sm">
+    <option value="yes" selected="selected">yes</option><option value="no">no</option>
+</select><br>
+全部可写 : &nbsp;&nbsp;<select name="writeable" class="input-sm btn-sm">
+    <option value="yes" selected="selected">yes</option><option value="no">no</option>
+</select><br>
+目录规则 : &nbsp;&nbsp;<input type="text" name="directory_mask" size="25" value="0777" readonly="readonly" class="form-control input-sm"><br>
+用户权限设置:<br>
+允许访问用户 : &nbsp;&nbsp;<input type="text" name="valid_users" size="20" value="" class="form-control input-sm"><br>
+禁止访问用户 : &nbsp;&nbsp;<input type="text" name="invalid_users" size="20" value="" class="form-control input-sm"><br>
+允许写入用户 : &nbsp;&nbsp;<input type="text" name="write_list" size="20" value="" class="form-control input-sm"><br>
+<input type="submit" name="submit" value="新增" class="btn-link"><br>
+------------------------------------------------<br>
+</form>
+    </div>
+{% endif %}
+
+{% for unit in share_conf %}
+    {% if md_mount_path in share_conf[unit]['path']%}
+<div class="navbar-form">
+<form name="{{ unit }}" action="" method="post">
+共享名称 &nbsp;:&nbsp;&nbsp;<input type="text" name="unit_name" size="25" value="{{ share_conf[unit]['unit_name'] }}" class="form-control input-sm"><br>
+    <input type="text" name="unit_name_old" size="30" value="{{ share_conf[unit]['unit_name'] }}" hidden="hidden">
+说&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;明&nbsp;: &nbsp;<input type="text" name="comment" size="25" value="{{ share_conf[unit]['comment'] }}" class="form-control input-sm"><br>
+    目录设置:<br>
+路&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;径 : &nbsp;<input type="text" name="path" size="25" value="{{ share_conf[unit]['path'] }}" class="form-control input-sm"><br>
+浏&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;览&nbsp; :
+    <select name="browseable" class="input-sm btn-sm">
+
+    <option value="yes"
+            {% if share_conf[unit]['browseable'] == 'yes' %}
+                selected="selected"
+            {% endif %}
+            >yes</option>
+        <option value="no"
+        {% if share_conf[unit]['browseable'] == 'no' %}
+                selected="selected"
+            {% endif %}
+        >no</option>
+</select><br>
+全部可写 : &nbsp;&nbsp;<select name="writeable" class="input-sm btn-sm">
+    <option value="yes"
+            {% if share_conf[unit]['writeable'] == 'yes' %}
+                selected="selected"
+            {% endif %}
+            >yes</option><option value="no"
+            {% if share_conf[unit]['writeable'] == 'no' %}
+                selected="selected"
+            {% endif %}
+            >no</option>
+</select><br>
+目录规则 : &nbsp;&nbsp;<input type="text" name="directory_mask" size="25" value="{{ share_conf[unit]['directory mask'] }}" readonly="readonly" class="form-control input-sm"><br>
+用户权限设置:<br>
+允许访问用户 : &nbsp;&nbsp;<input type="text" name="valid_users" size="20" value="{{ share_conf[unit]['valid users'] }}" class="form-control input-sm"><br>
+禁止访问用户 : &nbsp;&nbsp;<input type="text" name="invalid_users" size="20" value="{{ share_conf[unit]['invalid users'] }}" class="form-control input-sm"><br>
+允许写入用户 : &nbsp;&nbsp;<input type="text" name="write_list" size="20" value="{{ share_conf[unit]['write list'] }}" class="form-control input-sm"><br>
+<input type="submit" name="submit" value="修改" class="btn-link">&nbsp;&nbsp;<input type="submit" name="submit" value="删除" class="btn-link"><br>
+------------------------------------------------<br>
+</form>
+</div>
+    {% endif %}
+{% endfor %}
+
+    </div>
+{% endblock %}
+

@@ -1,0 +1,91 @@
+{% extends "title.html" %}
+{% block content %}
+<div class="container">
+<p><h4>链路聚合</h4>
+<!--判断空列表[]-->
+{% if bond_list[0] %}
+<a href="/net/">返回</a>
+    <table border="1">
+    <tr style="height:30px" class="panel-title" align="center">
+        <td width="60px" style="background-color: darkkhaki">网卡</td>
+        <td width="60px" style="background-color: darkkhaki">类型</td>
+        <td width="60px" style="background-color: darkkhaki">状态</td>
+        <td width="120px" style="background-color: darkkhaki">IP</td>
+        <td width="120px" style="background-color: darkkhaki">掩码</td>
+        <td width="120px" style="background-color: darkkhaki">网关</td>
+        <td width="200px" style="background-color: darkkhaki">DNS</td>
+        <td width="50px" style="background-color: darkkhaki">DHCP</td>
+        <td width="200px" style="background-color: darkkhaki">操作</td>
+    </tr>
+
+    {% for bond in bond_list %}
+        <tr style="height:30px" align="center">
+            <td >{{ bond['dev_name'] }}</td>
+            <td >{{ bond['type'] }}</td>
+        {% if bond['state'] == '断开' %}
+            <td style="background-color: orange">
+        {% else %}
+            <td>
+        {% endif %}
+            {{ bond['state'] }}</td>
+            {% if bond['type'] == 'bond' %}
+                <td >{{ bond['ip'] }}</td>
+                <td >{{ bond['netmask'] }}</td>
+                <td >{{ bond['gateway'] }}</td>
+                <td >{{ bond['dns'] }}</td>
+                <td >{{ bond['dhcp'] }}</td>
+                <td>
+                {% if bond['state'] == '连接' %}
+                    <a href="/net/net_mod/?con_name={{ bond['con_name'] }}">修改</a>
+            &nbsp;&nbsp;<a href="/net/?bond_link=off">断开</a>
+                    {% if bond['autocon'] == 'yes' %}
+                    <a href="/net/?autocon=off&con_name={{ bond['con_name'] }}">禁止自启</a>
+                {% else %}
+                    <a href="/net/?autocon=on&con_name={{ bond['con_name'] }}">自启动</a>
+                {% endif %}
+
+                {% else %}
+                    <a href="/net/?bond_link=on">连接</a>
+                {% endif %}
+                &nbsp;&nbsp;<a href="/net/net_mod/?con_name={{ bond['con_name'] }}&type=bond_del">删除</a>
+                </td>
+            {% else %}
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+            {% endif %}
+    {% endfor %}
+</table>
+{% else %}
+    <form action="" name="net_bond" method="post" class="navbar-form">
+        ----------------------------------------------<br>
+        &nbsp;&nbsp;选择网卡 :
+        {% for dev in dev_info %}
+            {% if dev['GENERAL.TYPE:'] == 'ethernet' %}
+                <input type="checkbox" name="dev_name" value="{{ dev['GENERAL.DEVICE:'] }}">
+                {{ dev['GENERAL.DEVICE:'] }}
+            {% endif %}
+        {% endfor %}
+        <br>
+        &nbsp;&nbsp;选择类型 :
+        <input type="radio" name="bond_type" value="1">主备模式
+        <input type="radio" name="bond_type" value="6" checked="checked">负载均衡模式
+        <br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DHCP :
+        <input type="radio" name="method" value="manual">手动
+        <input type="radio" name="method" value="auto" checked="checked">自动<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP :&nbsp;&nbsp;<input type="text" name="ipv4" size="25" value="" class="form-control input-sm"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;掩码 :&nbsp;&nbsp;<input type="text" name="netmask" size="25" value="" class="form-control input-sm"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;网 关 :&nbsp;<input type="text" name="gateway" size="25" value="" class="form-control input-sm"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS&nbsp; :&nbsp;<input type="text" name="dns" size="25" value="" class="form-control input-sm">
+        &nbsp;(多个DNS用","隔开)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="submit" value="新建" class="btn-link">
+        &nbsp;&nbsp;<a href="/net/">返回</a>
+
+        <br>----------------------------------------------<br>
+        主备模式:只有一个设备处于活动状态，当一个宕掉另一个马上由备份转换为主设备。<br>
+        负载均衡模式:网卡适应性负载均衡,接收负载均衡是通过ARP协商实现.
+
+    </form>
+{% endif %}
+</div>
+{% endblock %}

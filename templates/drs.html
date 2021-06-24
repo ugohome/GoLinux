@@ -1,0 +1,70 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+    <script>
+    function input_text(ms, svr_name) {
+        var txt = prompt(ms, "");
+        if (txt != null && txt != '') {
+            window.location.href = "/drs/?mod_port=" + txt + "&svr_name=" + svr_name;
+        }
+    }
+</script>
+    <p><h4>资源站服务管理 | <a href="/drs/update/"> 资源站升级</a></h4></p>
+    <table border="1" >
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="50px" class="panel-title" style="background-color: darkkhaki">序号</td>
+            <td align="center" width="150px" style="background-color: darkkhaki">服务</td>
+            <td align="center" width="150px" style="background-color: darkkhaki">状态</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">自启动</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">端口</td>
+            <td align="center" width="130px" style="background-color: darkkhaki">操作</td></tr>
+        {% for svr in svr_table %}
+            <tr style="height:30px">
+            <td align="center">{{ loop.index }}</td>
+            <td align="center">{{ svr['svr_name'] }}</td>
+            {% if svr['svr_state'][0:6] == 'active' %}
+                {% if svr['svr_state'] == 'active(starting)' %}
+                    <td align="center" style="background-color: orange">
+                {% else %}
+                    <td align="center" >
+                {% endif %}
+            {% else %}
+                <td align="center" style="background-color: orange">
+            {% endif %}
+                <a href="/drs/?svr_state={{ svr['svr_state'] }}&svr_name={{ svr['svr_name'] }}">{{ svr['svr_state'] }}</a></td>
+            {% if svr['svr_auto'] == 'disabled' %}
+                <td align="center" style="background-color: orange">
+            {% else %}
+                <td align="center">
+            {% endif %}
+                <a href="/drs/?svr_auto={{ svr['svr_auto'] }}&svr_name={{ svr['svr_name'] }}">{{ svr['svr_auto'] }}</a></td>
+                <td align="center">
+                    {{ svr_ports[svr['svr_name']] }}
+                </td>
+            <td align="center">
+                {% if svr['svr_name'] == 'drs-admin' %}
+                    <a href="/drs/?log_name=drs-admin">日志</a>
+                {% endif %}
+                {% if svr['svr_name'] == 'drs-api' %}
+                    <a href="/drs/?log_name=drs-api">日志</a>
+                {% endif %}
+                {% if svr['svr_name'] == 'drs-solr' %}
+                    <a href="/drs/?log_name=drs-solr">日志</a>
+                {% endif %}
+                {% if svr['svr_name'] == 'drs-transcode' %}
+                    <a href="/drs/?log_name=drs-transcode">日志</a>
+                {% endif %}
+                {% if svr['svr_name'] == 'nginx' %}
+                    <button type="button" onclick="input_text('端口 :', 'nginx')" class="btn-link"> 修改端口</button>
+                    <a href="/drs/?ssl_model={{ ssl_d['ssl'] }}">{{ ssl_d['ssl'] }}</a>
+                {% endif %}
+                {% if svr['svr_name'] == 'proftpd' %}
+                    <button type="button" onclick="input_text('端口 :', 'proftpd')" class="btn-link"> 修改端口</button>
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    </div>
+{% endblock %}

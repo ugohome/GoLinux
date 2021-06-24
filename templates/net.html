@@ -1,0 +1,58 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+    <p><h4>网络管理</h4>
+        <a href="/net/net_bond/">链路聚合</a>
+    <table border="1">
+    <tr style="height:30px" class="panel-title" align="center">
+        <td width="60px" style="background-color: darkkhaki">网卡</td>
+        <td width="60px" style="background-color: darkkhaki">类型</td>
+        <td width="60px" style="background-color: darkkhaki">状态</td>
+        <td width="120px" style="background-color: darkkhaki">IP</td>
+        <td width="120px" style="background-color: darkkhaki">掩码</td>
+        <td width="120px" style="background-color: darkkhaki">网关</td>
+        <td width="200px" style="background-color: darkkhaki">DNS</td>
+        <td width="50px" style="background-color: darkkhaki">DHCP</td>
+        <td width="150px" style="background-color: darkkhaki">操作</td>
+    </tr>
+        {% for line in netlist %}
+            <tr style="height:30px" align="center">
+            <td>{{ line['dev_name'] }}</td>
+            <td>{{ line['type'] }}</td>
+
+                {% if line['state'] == 'on' %}
+                   <td>连接
+                {% else %}
+                    <td style="background-color: orange">断开
+                {% endif %}
+            </td>
+            <td>{{ line['ip'] }}</td>
+            <td>{{ line['netmask'] }}</td>
+            <td>{{ line['gateway'] }}</td>
+            <td>{{ line['dns'] }}</td>
+            <td>
+                {% if line['method'] == 'auto' %}
+                自动
+                {% else %}
+                手动
+                {% endif %}
+            </td>
+            <td>
+                {% if line['state'] == 'on' %}
+                <a href="/net/net_mod/?con_name={{ line['con_name'] }}">修改</a>&nbsp;&nbsp;
+                <a href="/net/?link=off&dev_name={{ line['dev_name'] }}">断开</a>
+                {% if line['autocon'] == 'yes' %}
+                    <a href="/net/?autocon=off&con_name={{ line['con_name'] }}">禁止自启</a>
+                {% else %}
+                    <a href="/net/?autocon=on&con_name={{ line['con_name'] }}">自启动</a>
+                {% endif %}
+                {% else %}
+                <a href="/net/?link=on&dev_name={{ line['dev_name'] }}">连接</a>
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    </div>
+{% endblock %}

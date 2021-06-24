@@ -1,0 +1,45 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+
+{{ md_disks }}
+<h4>正在创建新的RAID卷组</h4><p></p>
+<form action="" method="post" class="navbar-form">
+<a href="/raid/">返回</a>
+<input type="submit" value="确定" class="btn-link"><br>
+========================<br>
+    请选择RAID级别 :
+    <input type="radio" name="level" value="0" checked="checked" class="radio">Raid 0
+    <input type="radio" name="level" value="1" class="radio">Raid 1
+    <input type="radio" name="level" value="5" class="radio">Raid 5
+    <input type="radio" name="level" value="6" class="radio">Raid 6
+<br>
+请选择条带大小 :
+    <input type="radio" name="chunk" value="32" class="radio">32 K
+    <input type="radio" name="chunk" value="64" class="radio">64 K
+    <input type="radio" name="chunk" value="128" class="radio">128 K
+    <input type="radio" name="chunk" value="512" checked="checked" class="radio">512 k
+    <input type="radio" name="chunk" value="1024" class="radio">1 M
+<br>
+请选择磁盘 :
+{% for disk in disks %}
+    <input type="checkbox" name="md_disks" value="{{ disk }}" class="checkbox"> {{ disk }}
+{% endfor %}
+<br>
+请选择执备盘个数 :
+    <input type="radio" name="md_spare" value="1">1
+    <input type="radio" name="md_spare" value="1">2
+
+<br>
+========================<br>
+磁盘详细信息:<br>
+{% for l in disk_info %}
+    {% for d in l %}
+        {{ d[0] }}&nbsp;&nbsp;{{ d[1] }}&nbsp;&nbsp;{{ d[2] }}
+        <br>
+    {% endfor %}
+{% endfor %}
+</form>
+
+</div>
+{% endblock %}

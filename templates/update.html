@@ -1,0 +1,34 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+    <p><h4><a href="/drs/">资源站服务管理</a> | 资源站升级</h4></p>
+    {% if logs %}
+        <span style="color: darkolivegreen">升级完成,详情请查看以下日志:</span><p>
+        {% for log in logs %}
+        <a href="/drs/update/?log_name={{ log }}">{{ log }}</a><br>
+        {% endfor %}
+    {% else %}
+        <!--在debug模式下,以下form中action如果/drs/update,提交后将报错,所以最好使用action="/drs/update/"-->
+        <form name="update" action="/drs/update/" method="post">
+            <!--通过button的id名upload-btn可以调用document.getElementById("upload-btn")
+            的onclick事件,触发dz.processQueue()上传,如果没有上传成功,可能是flask_dropzone出现异常,排查配置.-->
+            <button type="button" id="upload-btn" class="btn-link" style="color: darkolivegreen">上传</button>
+            <input type="submit" name="update" value="开始升级" class="btn-link" style="color: darkolivegreen">
+        </form>
+
+    {{ dropzone.load_css() }}
+    {{ dropzone.style('border: 1px dashed #0087F7;') }}
+    {{ dropzone.load_js() }}
+    {{ dropzone.create(action='/drs/update/') }}
+       <!--一定要将这个配置引入,否则后端的配置是无效的.-->
+    {{ dropzone.config() }}
+    <!--下面这条可以将dropzone.js的各种配置信息加进来,扩展配置功能,dropzone.js配置详见https://www.dropzonejs.com/#configuration
+    document.getElementById("upload-btn")     初始化一个btn事件,在标签中调用就可以实现dz.processQueue()
+    -->
+    {{ dropzone.config(custom_init='dz = this;document.getElementById("upload-btn").addEventListener("click", function handler(e) {dz.processQueue();});',
+                 custom_options='autoProcessQueue: false, addRemoveLinks: true, parallelUploads: 20, dictRemoveFile: "删除"') }}
+
+    {% endif %}
+
+    </div>
+{% endblock %}

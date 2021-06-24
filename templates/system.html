@@ -1,0 +1,83 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container" xmlns="http://www.w3.org/1999/html">
+    <p><h4>系统管理 | <a href="/system/process/">进程管理</a>
+     | <a href="/system/?syscmd=reboot">重启</a>
+         | <a href="/system/?syscmd=poweroff">关机</a>
+    </h4></p>
+        <form action="" class="navbar-form" method="post">
+    <div style="color: midnightblue">
+
+            系统时间 : <input type="text" name="dt" class="form-control input-sm"
+                          value="{{ sysinfo['dt'].strftime("%Y-%m-%d %H:%M:%S") }}">
+            <input type="submit" name="submit" value="修改" class="btn-link"><br>
+            MAC地址 : {{ sysinfo['MAC'] }}<br>
+    CPU : {{ sysinfo['cpu_type'] }}&nbsp;&nbsp;&nbsp;&nbsp;
+        核芯 :{{ sysinfo['cpu_count_logical'] }}&nbsp;&nbsp;&nbsp;&nbsp;
+        线程 : {{ sysinfo['cpu_count_phy'] }}&nbsp;&nbsp;&nbsp;&nbsp;<br>
+
+    </div>
+        <div style="color: midnightblue">CPU负载均衡 ( 1, 5, 15 分钟 ) :{{ sysinfo['cpu_loadavg'] }}<br></div>
+    <table border="1" >
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="100px" class="panel-title" style="background-color: darkkhaki">用户占用</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">系统占用</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">IO等待</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">其他占用</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">可用</td>
+        </tr>
+        <td align="center">{{ sysinfo['cpu_user'] }}%</td>
+        <td align="center">{{ sysinfo['cpu_system'] }}%</td>
+        <td align="center">{{ sysinfo['cpu_iowait'] }}%</td>
+        <td align="center">{{ sysinfo['cpu_other'] }}%</td>
+        <td align="center">{{ sysinfo['cpu_idle'] }}%</td>
+    </table>
+        <div style="color: midnightblue">内存 :<br></div>
+    <table border="1" >
+        <tr style="height:30px" class="panel-title" >
+            <td align="center" width="100px" class="panel-title" style="background-color: darkkhaki">总量</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">已用</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">空闲</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">buff/cache</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">使用率</td>
+        </tr>
+        <td align="center">{{ sysinfo['mem_total'] }}</td>
+        <td align="center">{{ sysinfo['mem_used'] }}</td>
+        <td align="center">{{ sysinfo['mem_free'] }}</td>
+        <td align="center">{{ sysinfo['mem_buff_cache'] }}</td>
+        <td align="center">{{ sysinfo['mem_percent'] }}%</td>
+    </table>
+        <div style="color: midnightblue">缓存(swap) :<br></div>
+    <table border="1" >
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="100px" class="panel-title" style="background-color: darkkhaki">总量</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">已用</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">空闲</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">使用率</td>
+            <td align="center" width="100px" style="background-color: darkkhaki"></td>
+        </tr>
+        <td align="center">{{ sysinfo['swap_total'] }}</td>
+        <td align="center">{{ sysinfo['swap_used'] }}</td>
+        <td align="center">{{ sysinfo['swap_free'] }}</td>
+        <td align="center">{{ sysinfo['swap_percent'] }}%</td>
+        <td align="center"></td>
+    </table>
+    <div style="color: midnightblue">磁盘 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;网络 :<br></div>
+    <table border="1" >
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="100px" class="panel-title" style="background-color: darkkhaki">读取(秒)</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">写入(秒)</td>
+            <td align="center" width="100px" style="background-color: darkkhaki"></td>
+            <td align="center" width="100px" style="background-color: darkkhaki">发送(秒)</td>
+            <td align="center" width="100px" style="background-color: darkkhaki">接收(秒)</td>
+        </tr>
+        <td align="center">{{ sysinfo['io_read'] }}</td>
+        <td align="center">{{ sysinfo['io_write'] }}</td>
+        <td align="center"></td>
+        <td align="center">{{ sysinfo['net_sent'] }}</td>
+        <td align="center">{{ sysinfo['net_recv'] }}</td>
+    </table>
+            </form>
+    </div>
+{% endblock %}

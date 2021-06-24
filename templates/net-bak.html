@@ -1,0 +1,60 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+    <p><h4>网络管理</h4>
+        <a href="/net/net_bond/">链路聚合</a>
+    <table border="1">
+    <tr style="height:30px" class="panel-title" align="center">
+        <td width="80px">网卡名称</td><td width="80px">类型</td><td width="80px">状态</td><td width="150px">IP/掩码</td><td width="150px">网关</td>
+        <td width="250px">DNS</td><td width="70px">DHCP</td><td width="150px">操作</td>
+    </tr>
+    {% for dev in dev_info %}
+        {% if dev['GENERAL.DEVICE:'] not in bond_dev %}
+        <tr style="height:30px" align="center">
+            <td >{{ dev['GENERAL.DEVICE:'] }}</td>
+            <td >{{ dev['GENERAL.TYPE:'] }}</td>
+            <td >
+                {% if '(connected)' in dev['GENERAL.STATE:'] %}
+                    连接
+                {% else %}
+                    断开
+                {% endif %}
+            </td>
+
+
+
+            <td >{{ dev['IP4.ADDRESS[1]:'] }}</td>
+            <td >{{ dev['IP4.GATEWAY:'] }}</td>
+            <td >{{ dev['IP4.DNS[1]:'] }}&nbsp;&nbsp;{{ dev['IP4.DNS[2]:'] }}</td>
+            <td >
+                {% for dname in dhcp %}
+                    {% if dname == dev['GENERAL.DEVICE:'] %}
+                        {% if dhcp[dname] == 'auto' %}
+                            自动
+                        {% else %}
+                            手动
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+            </td>
+            <td >
+            {% for con in con_name %}
+                {% if con == dev['GENERAL.DEVICE:'] %}
+                    <a href="/net/net_mod/?con_name={{ con_name[con] }}">修改</a>
+                {% endif %}
+            {% endfor %}
+            &nbsp;&nbsp;
+                {% if '(connected)' in dev['GENERAL.STATE:'] %}
+                    <a href="/net/?link=off&dev_name={{ dev['GENERAL.DEVICE:'] }}">断开</a>
+                {% else %}
+                    <a href="/net/?link=on&dev_name={{ dev['GENERAL.DEVICE:'] }}">连接</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </table>
+
+    </div>
+{% endblock %}

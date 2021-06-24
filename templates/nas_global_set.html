@@ -1,0 +1,31 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+<h4>NAS设置</h4>
+
+<!--在IF或者FOR语中,输出的变量值前后会出现空格,需要在 % 后加上 - 来去除空格,如下代码-->
+    <form action="" name="nas_set" method="post" class="navbar-form">
+    <a href="/raid/">返回</a><input type="submit" name="submit" value="确定" class="btn-link"><br>
+    ==========================<br>
+        连&nbsp;接&nbsp;数&nbsp; :&nbsp;<input type="text" name="link_max" value="
+    {%- if global_info['max connections'] -%}
+        {{ global_info['max connections'] }}
+    {%- else -%}
+        0
+    {%- endif -%}
+" size="5"  class="form-control input-sm">  ( 0不限制. )<br>
+        连接规则 :<br>
+        允&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;许&nbsp;&nbsp;&nbsp;:&nbsp;<input type="text" name="allow" size="40" value="{{ global_info['hosts allow'] }}" class="form-control input-sm"><br>
+        禁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;止&nbsp;&nbsp;&nbsp;:&nbsp;<input type="text" name="deny" size="40" value="{{ global_info['hosts deny'] }}" class="form-control input-sm"><br>
+        <input type="text" name="type" value="[global]" hidden="hidden">
+    -----------------------------------------<br>
+    IP:&nbsp;192.168.10.58&nbsp;&nbsp;<br>
+        IP段:&nbsp;192.168.10.0/24&nbsp;&nbsp;<br>
+        排除:&nbsp;192.168.10.0/24&nbsp;EXCEPT&nbsp;192.168.10.58<br>
+    多个IP或IP段用空格分开.<br>
+
+    </form>
+
+
+</div>
+{% endblock %}

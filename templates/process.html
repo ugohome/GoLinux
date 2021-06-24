@@ -1,0 +1,60 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+        <h4><a href="/system/">系统管理</a> | 进程管理
+     | <a href="/system/?syscmd=reboot">重启</a>
+         | <a href="/system/?syscmd=poweroff">关机</a>
+        </h4>
+    <div style="color: midnightblue">CPU占用TOP 10</div>
+    <table border="1" style="table-layout: fixed;" width="1130px">
+    <!--要让TD不显示超出内容,table属性必需固定宽度-->
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="40px" style="background-color: darkkhaki">序号</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">PPID</td>
+            <td align="center" width="70px" class="panel-title" style="background-color: darkkhaki">PID</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">CPU占用</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">内存占用</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">内存使用</td>
+            <td align="center" style="background-color: darkkhaki">命令详情</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">操作</td>
+        </tr>
+        {% for cpu in cpu_top %}
+        <tr>
+        <td align="center">{{ loop.index }}</td>
+        <td align="center">{{ cpu['ppid'] }}</td>
+        <td align="center">{{ cpu['pid'] }}</td>
+            <td align="center" ><font color="red">{{ cpu['cpu_percent'] }}%</font></td>
+        <td align="center">{{ cpu['mem_percent'] }}%</td>
+        <td align="center">{{ cpu['mem_rss'] }}</td>
+        <td style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;" title="{{ cpu['cmd'] }}">{{ cpu['cmd'] }}</td>
+        <td align="center"><a href="/system/?kill_pid={{ cpu['pid'] }}">结束进程</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+     <div style="color: midnightblue">内存占用TOP 10</div>
+    <table border="1" style="table-layout:fixed" width="1130px">
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="40px" style="background-color: darkkhaki">序号</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">PPID</td>
+            <td align="center" width="70px" class="panel-title" style="background-color: darkkhaki">PID</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">内存占用</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">内存使用</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">CPU占用</td>
+            <td align="center" style="background-color: darkkhaki;">命令详情</td>
+            <td align="center" width="70px" style="background-color: darkkhaki">操作</td>
+        </tr>
+        {% for mem in mem_top %}
+        <tr>
+        <td align="center">{{ loop.index }}</td>
+        <td align="center">{{ mem['ppid'] }}</td>
+        <td align="center">{{ mem['pid'] }}</td>
+        <td align="center"><font color="red">{{ mem['mem_percent'] }}%</font></td>
+        <td align="center">{{ mem['mem_rss'] }}</td>
+        <td align="center">{{ mem['cpu_percent'] }}%</td>
+        <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="{{ mem['cmd'] }}">{{ mem['cmd'] }}</td>
+        <td align="center"><a href="/system/?kill_pid={{ mem['pid'] }}">结束进程</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+
+<script>
+    function input_text(ms,user_name, type) {
+        var txt = prompt(ms, "");
+        if (txt != null && txt != '') {
+            window.location.href = "/nas/nas_user/?user_name=" + user_name + "&pwd=" + txt + "&type=" + type;
+        }
+    }
+</script>
+<form action="" method="post" class="navbar-form">
+<h4>用户管理</h4>
+    <a href="/raid/">返回</a>
+    <button type="button" onclick="input_text('用户名 :','', 'create_user')" class="btn-link"> 新建</button>
+    <input type="submit" name="submit" value="删除" class="btn-link">
+    <br>
+<table border="1" class="navbar-form">
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="50px" class="panel-title" style="background-color: darkkhaki">选项</td>
+        <td align="center" width="100px" class="panel-title" style="background-color: darkkhaki">用户名</td>
+        <td align="center" width="100px" class="panel-title" style="background-color: darkkhaki">操作</td>
+{% for user in show_user %}
+    <tr style="height:30px" >
+    <td align="center">
+    <input type="checkbox" name="users" value="{{ user[0] }}">
+    </td>
+    <td align="center">
+    {{ user[0] }}
+    </td>
+    <td align="center">
+    <button type="button" onclick="input_text('新密码 :','{{ user[0] }}', 'mody_pwd')" class="btn-link"> 密码重置</button>
+    </td>
+{% endfor %}
+</form>
+
+</div>
+{% endblock %}

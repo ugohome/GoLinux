@@ -1,0 +1,32 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+
+<h4>正在为RAID: {{ md_name }} 添加新磁盘</h4>
+<form action="" method="post">
+<a href="/raid/info/{{ md_name }}">返回</a>
+<input type="submit" value="确定" class="btn-link"><br>
+请选择一块新的磁盘:<br>
+{% for disk in disks %}
+    <input type="radio" name="newdisk" value="{{ disk }}"> {{ disk }}
+{% endfor %}
+<br>
+选择磁盘类型:
+<input type="radio" name="type" value="add_new_dev" checked="checked"> 添加热备盘
+<input type="radio" name="type" value="ext_new_dev"> 扩容
+<br>
+<input type="text" name="md_name" value="{{ md_name }}" hidden>
+<input type="text" name="md_dev" value="{{ md_dev }}" hidden>
+
+</form>
+===============================<br>
+磁盘详细信息:<br>
+{% for l in disks_info %}
+    {% for d in l %}
+        {{ d[0] }}&nbsp;&nbsp;{{ d[1] }}&nbsp;&nbsp;{{ d[2] }}
+        <br>
+    {% endfor %}
+{% endfor %}
+
+</div>
+{% endblock %}

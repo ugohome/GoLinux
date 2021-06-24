@@ -1,0 +1,43 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+<script>
+    function input_text(md_name, type) {
+            var txt = prompt("挂载路径:", "/drsBT/ftp/storage");
+            if (txt!=null && txt!=''){
+                window.location.href="/raid/?md_name="+md_name+"&mount_path="+txt+"&type="+type;
+            }
+
+        }
+</script>
+<p><h4>RAID卷组管理</h4></p>
+<p><a href="/raid/raid_create/">新建RAID</a></p>
+    <table border="1" >
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="50px" class="panel-title" style="background-color: darkkhaki">名称</td>
+            <td align="center" width="50px" style="background-color: darkkhaki">级别</td>
+            <td align="center" width="150px" style="background-color: darkkhaki">状态</td>
+            <td align="center" width="200px" style="background-color: darkkhaki">操作</td></tr>
+    {% for str in mdtitle %}
+        {% if str[1] != 'container' %}
+        <tr style="height:30px">
+            <td align="center"><a href="/raid/info/{{ str[0] }}"> {{ str[0] }}</a></td>
+            <td align="center">{{ str[1] }}</td>
+            <td align="center">{{ str[2] }} &nbsp;&nbsp;&nbsp;</td>
+        <td align="center"><a href="/raid/raid_del/?md_name={{ str[0] }}">删除RAID</a>
+            {% if str[2]=='clean' %}
+                {% if str[3] == '' %}
+                    <!--<a href="/raid/" onclick="input_text('{{ str[0] }}', 'mount')">挂载</a>-->
+                    <button type="button" onclick="input_text('{{ str[0] }}', 'mount')" class="btn-link">挂载</button>
+                {% else %}
+                    <a href="/raid/?mount_path={{ str[3] }}&type=umount" >卸载</a>
+                    <a href="/nas/?md_mount_path={{ str[3] }}&md_name={{ str[0] }}" >NAS管理</a>
+                {% endif %}
+             {% endif %}
+        </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}

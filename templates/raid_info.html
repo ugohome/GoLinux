@@ -1,0 +1,51 @@
+{% extends "title.html" %}
+{% block content %}
+    <div class="container">
+
+<h4>RAID : {{ md_info[0] }}详情</h4>
+    <a href="/raid/">返回</a>
+{% if 'raid0' not in md_info[1] and 'FAILED' not in md_info[2] and md_info[4] == '' %}
+    <a href="/raid/raid_change_dev/?md_name={{ md_info[0] }}&type=add_new_dev">添加磁盘</a>
+{% endif %}
+    <a href="/raid/raid_change_dev/?md_name={{ md_info[0] }}&type=refresh_md">刷新RAID</a>
+    <br>
+===============================<br>
+级别:{{ md_info[1] }} 状态:{{ md_info[2] }} 条带:{{ md_info[3] }} 单盘容量:{{ md_info[5] }} 同步:{{ md_info[4] }}<br>
+    设备路径: {{ md_size_info[0][0] }}
+    {% if md_size_info[0]|length >6 %}
+        挂载路径:未挂载<br>
+        总容量:{{ md_size_info[0][1] }}
+    {% else %}
+        挂载路径:{{ md_size_info[0][5] }}<br>
+        总容量:{{ md_size_info[0][1] }} 已用:{{ md_size_info[0][2] }}
+    可用:{{ md_size_info[0][3] }}使用率:{{ md_size_info[0][4] }}
+    {% endif %}
+    <br>
+    磁盘信息:<br>
+    <table border="1" class="navbar-form">
+        <tr style="height:30px" class="panel-title">
+            <td align="center" width="50px" class="panel-title" style="background-color: darkkhaki">序号</td>
+        <td align="center" width="100px" class="panel-title" style="background-color: darkkhaki">名称</td>
+        <td align="center" width="120px" class="panel-title" style="background-color: darkkhaki">状态</td>
+        <td align="center" width="150px" class="panel-title" style="background-color: darkkhaki">操作</td>
+        </tr>
+    {% for md_line in md_devs %}
+        <tr style="height:20px">
+            <td align="center">{{ md_line[0] }}</td>
+            <td align="center">{{ md_line[1] }}</td>
+            <td align="center">{{ md_line[2] }}--{{ md_line[3] }}</td>
+            <td align="center">
+            {% if 'faulty' in md_line and 'FAILED' not in md_info[2] and md_info[4] == '' %}
+                <a href="/raid/raid_change_dev/?md_name={{ md_info[0] }}&md_dev={{ md_line[1] }}&type=rm_faulty_dev">移除坯盘</a>
+            {% elif md_line[2] == 'spare' and 'FAILED' not in md_info[2] and md_info[4] == '' %}
+                <a href="/raid/raid_change_dev/?md_name={{ md_info[0] }}&md_dev={{ md_line[1] }}&type=rm_faulty_dev">移除热备盘</a>
+                <a href="/raid/raid_change_dev/?md_name={{ md_info[0] }}&md_dev={{ md_line[1] }}&type=ext_new_dev">转为存储盘</a>
+            {% else %}
+                &nbsp;
+            {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}

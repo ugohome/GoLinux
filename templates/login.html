@@ -1,0 +1,26 @@
+{% extends "title.html" %}
+
+{% block content %}
+<div class="container">
+    <form name="login" action="/login/" method="post" class="navbar-form">
+
+        <table class="table-condensed">
+            <tr>
+                <td colspan="2" class="text-center"><h4>用户登陆</h4></td>
+            </tr>
+            <td class="text-right">用户名 :</td>
+            <td>&nbsp;&nbsp;<input type="text" name="username" class="form-control input-sm"></td>
+            </tr>
+            <tr>
+            <td class="text-right">密&nbsp;&nbsp;&nbsp;&nbsp;码 :</td>
+            <td>&nbsp;&nbsp;<input type="password" name="password" class="form-control input-sm"></td>
+            </tr>
+            <tr>
+                <td></td><td><input type="submit" name="submit" value="确定" class="btn-link">
+                    <input type="reset" name="reset" value="取消" class="btn-link"></td>
+            </tr>
+        </table>
+
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "title.html" %}
+{% block content %}
+<div class="container">
+<p><h4>网络配置</h4>
+    <form action="" name="net_mod" method="post">
+    <div class="navbar-form">
+        &nbsp;&nbsp;DHCP : &nbsp;&nbsp;<input type="radio" name="method" value="manual"
+        {% if con_info['ipv4.method:'] == 'manual' %}
+            checked="checked"
+        {% endif %}
+        >手动
+        <input type="radio" name="method" value="auto"
+        {% if con_info['ipv4.method:'] == 'auto' %}
+            checked="checked"
+        {% endif %}
+        >自动<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;网卡 : &nbsp;&nbsp;{{ con_info['GENERAL.DEVICES:'] }}
+        <input type="text" name="dev_name" value="{{ con_info['GENERAL.DEVICES:'] }}" hidden="hidden"><br>
+        <input type="text" name="con_name" value="{{ con_info['GENERAL.NAME:'] }}" hidden="hidden">
+        &nbsp;&nbsp;&nbsp;&nbsp;类型 : &nbsp;&nbsp;{{ con_info['connection.type:'] }}
+        <input type="text" name="type" value="{{ con_info['connection.type:'] }}" hidden="hidden"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP :&nbsp;&nbsp;<input type="text" name="ipv4" size="25" value="{{ con_info['ip'] }}" class="form-control input-sm"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;掩码 :&nbsp;&nbsp;<input type="text" name="netmask" size="25" value="{{ con_info['netmask'] }}" class="form-control input-sm"><br>
+    <!--如果在value=的后面换行,显示时TEXT中将会多出一个空格.-->
+        &nbsp;&nbsp;&nbsp;&nbsp;网关 :&nbsp;&nbsp;<input type="text" name="gateway" size="25" value="{{ con_info['IP4.GATEWAY:'] }}" class="form-control input-sm"><br>
+        &nbsp;&nbsp;DNS1 :&nbsp;&nbsp;<input type="text" name="dns1" size="25" value="{{ con_info['IP4.DNS[1]:'] }}" class="form-control input-sm"><br>
+        &nbsp;&nbsp;DNS2 :&nbsp;&nbsp;<input type="text" name="dns2" size="25" value="{{ con_info['IP4.DNS[2]:'] }}" class="form-control input-sm"><br>
+        <input type="submit" name="submit" value="确定" class="btn-link">
+        &nbsp;&nbsp;<a href="/net/">返回</a><br>
+    </div>
+    </form>
+</div>
+{% endblock %}

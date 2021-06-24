@@ -1,0 +1,8 @@
+1 概述：
+	本系统是利用python3开发的，管理linux的简单应用。
+2 依赖：
+	samba
+3 安装:
+	利用pipe导入dependencys.txt中的依赖，python app.py即可。
+4 目录结构:
+	
